@@ -1,0 +1,56 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Domain {
+  createdAt DateTime          @default(now())
+  id        String            @id @default(cuid())
+  name      String?
+  status    EnumDomainStatus?
+  updatedAt DateTime          @updatedAt
+}
+
+model Email {
+  attachments Attachment[]
+  body        String?
+  createdAt   DateTime     @default(now())
+  id          String       @id @default(cuid())
+  receivedAt  DateTime?
+  recipient   String?
+  sender      String?
+  subject     String?
+  updatedAt   DateTime     @updatedAt
+}
+
+model Attachment {
+  createdAt   DateTime @default(now())
+  email       Email?   @relation(fields: [emailId], references: [id])
+  emailId     String?
+  fileContent Json?
+  fileSize    Int?
+  fileType    String?
+  filename    String?
+  id          String   @id @default(cuid())
+  updatedAt   DateTime @updatedAt
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+enum EnumDomainStatus {
+  Option1
+}
