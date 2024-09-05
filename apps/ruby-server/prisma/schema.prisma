@@ -1,0 +1,88 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Blockchain {
+  blockData    Json?
+  createdAt    DateTime  @default(now())
+  hash         String?
+  id           String    @id @default(cuid())
+  previousHash String?
+  timestamp    DateTime?
+  updatedAt    DateTime  @updatedAt
+}
+
+model DataTransfer {
+  createdAt    DateTime                @default(now())
+  data         String?
+  id           String                  @id @default(cuid())
+  status       EnumDataTransferStatus?
+  transferTime DateTime?
+  updatedAt    DateTime                @updatedAt
+}
+
+model Documentation {
+  content   String?
+  createdAt DateTime                  @default(now())
+  docType   EnumDocumentationDocType?
+  id        String                    @id @default(cuid())
+  updatedAt DateTime                  @updatedAt
+  version   String?
+}
+
+model PeerCommunication {
+  createdAt  DateTime  @default(now())
+  id         String    @id @default(cuid())
+  message    String?
+  receiverId String?
+  senderId   String?
+  sentAt     DateTime?
+  updatedAt  DateTime  @updatedAt
+}
+
+model IntegrationTest {
+  component String?
+  createdAt DateTime                   @default(now())
+  id        String                     @id @default(cuid())
+  result    EnumIntegrationTestResult?
+  testedAt  DateTime?
+  updatedAt DateTime                   @updatedAt
+}
+
+model FuturePlanning {
+  createdAt   DateTime  @default(now())
+  description String?
+  dueDate     DateTime?
+  feature     String?
+  id          String    @id @default(cuid())
+  updatedAt   DateTime  @updatedAt
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+enum EnumDataTransferStatus {
+  Option1
+}
+
+enum EnumDocumentationDocType {
+  Option1
+}
+
+enum EnumIntegrationTestResult {
+  Option1
+}
